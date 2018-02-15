@@ -1,0 +1,226 @@
+---
+title: "Homework three"
+author: "Yi Chen(yc3356)"
+date: "February 12, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Advanced Data Analysis
+# Homework Three
+##### **Yi Chen, yc3356**
+
+
+## problem one
+### question (a)
+Clearly, this is a one-way ANOVA question and the design is balanced (20 observations in each group) 
+```{r}
+# read the data
+setwd("C:/Users/cheny/Desktop/study/second term/Advanced Data Analysis/homework/homework three")
+data <- read.table("sofdrink.txt",header = TRUE)
+```
+first, let us analysis the data a little bit.
+```{r}
+# boxplot
+boxplot(data$Time_lapse~data$Agent)
+```
+
+**Analysis**
+
+As we can see from the boxplot, there exist obvious difference among the means from different group.Thus, it is reasonable to assume that the factor agency do have some kind of effect on the time lapse.
+
+Now we plot the one way anova table here:
+```{r}
+data$Agent <- as.factor(data$Agent)
+# anova table
+oneway_anove <- aov(formula = Time_lapse~Agent, data = data)
+summary(oneway_anove)
+```
+
+**Analysis**
+
+According to the result in the table. We can take a F test:
+
+$$ H_0:\mu_1 = \mu_2=\mu_3=\mu_4=\mu_5$$
+
+As we can see, SSR=4430, SSE=715,MSR=1107.5,MSE=7.5,F=147.2
+
+If we take $\alpha = 0.05$, we have F(0.05,4,95)= 2.467494. Besides here Pr(>F) < 0.05. Thus, we can reject $H_0$ 
+
+Conclusion: mean time lapse differ for the five agents.
+
+### question (b)
+```{r}
+# use the Tukey procedure
+tk <- TukeyHSD(oneway_anove)
+tk
+```
+
+**Analysis**
+
+As we can see from the result of Tukey procedure. We can conclude that there are  groups:
+Group one: angent 1 , angent 2
+Group two: angent 3
+Group three: angent 5
+Group four: angent 4
+
+If we just reduce out accuracy a little bit. We can also take angent 3 and angent 4 as a group
+
+```{r}
+angent_1 <- data$Time_lapse[data$Agent==1]
+angent_2 <- data$Time_lapse[data$Agent==2]
+angent_3 <- data$Time_lapse[data$Agent==3]
+angent_4 <- data$Time_lapse[data$Agent==4]
+angent_5 <- data$Time_lapse[data$Agent==5]
+pair_compare <- as.data.frame(cbind(angent_1,angent_2,angent_3,angent_4,angent_5))
+pairs(pair_compare[1:5], pch = 21)
+```
+```{r}
+plot(tk)
+```
+
+### question (c)
+Here we need to use the Bonferroni procedure with 90% family confidence coefficient.
+```{r}
+data_new <- data[(data$Agent == 1 | data$Agent == 3 | data$Agent == 5),]
+
+summary(aov(formula = Time_lapse~Agent, data = data_new))
+
+
+
+bonftest <- pairwise.t.test(data_new$Time_lapse,data_new$Agent,pool.sd = TRUE, p.adjust.method='bonf')
+bonftest
+```
+
+### question (d)
+```{r}
+# first Let calculate the mean of L hat
+E_L_hat <- (1/2) * mean(angent_1) + (1/2) * mean(angent_2) - (1/2) * mean(angent_3) -(1/2) * mean(angent_4) 
+# scond we need to find the value of mse in this situation
+data_d_1 <- data[(data$Agent == 1 | data$Agent ==2 | data$Agent == 3 | data$Agent == 4),]
+summary(aov(Time_lapse~Agent,data = data_d_1))
+mse <- 7
+
+# calcualte standard deviation of L hat
+se_L_hat <- sqrt(mse)*sqrt( ((1/2)^2/20)*4)
+                
+cat('lower bond is:',(E_L_hat - se_L_hat * qt(p=0.975,df = 80-4)))      
+cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p=0.975,df = 80-4)))
+```
+### question (e)
+```{r}
+# first Let calculate the mean of L hat
+E_L_hat <-  mean(angent_1) - mean(angent_2) 
+# scond we need to find the value of mse in this situation
+data_e_1 <- data[(data$Agent == 1 | data$Agent ==2),]
+summary(aov(Time_lapse~Agent,data = data_e_1))
+mse <- 7.52
+
+# calcualte standard deviation of L hat
+se_L_hat <- sqrt(mse)*sqrt((1/20)*2)
+                
+cat('lower bond is:',(E_L_hat - se_L_hat * qt(p=0.975,df = 40-2)))      
+cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p=0.975,df = 40-2)))
+```
+
+```{r}
+# first Let calculate the mean of L hat
+E_L_hat <-  (1/2)* mean(angent_1) + (1/2)* mean(angent_2) - mean(angent_5)
+# scond we need to find the value of mse in this situation
+data_e_2 <- data[(data$Agent == 1 | data$Agent ==2 | data$Agent == 5),]
+summary(aov(Time_lapse~Agent,data = data_e_2))
+mse <- 8.21
+
+# calcualte standard deviation of L hat
+se_L_hat <- sqrt(mse)*sqrt(((1/2)^2/20)*2 + 1/20)
+                
+cat('lower bond is:',(E_L_hat - se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))      
+cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))
+```
+```{r}
+# first Let calculate the mean of L hat
+E_L_hat <-  (1/2)* mean(angent_3) + (1/2)* mean(angent_4) - mean(angent_5)
+# scond we need to find the value of mse in this situation
+data_e_2 <- data[(data$Agent == 3 | data$Agent == 4 | data$Agent == 5),]
+summary(aov(Time_lapse~Agent,data = data_e_2))
+mse <- 7.5
+
+# calcualte standard deviation of L hat
+se_L_hat <- sqrt(mse)*sqrt(((1/2)^2/20)*2 + 1/20)
+                
+cat('lower bond is:',(E_L_hat - se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))      
+cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))
+```
+
+### question (f)
+```{r}
+E_L <- 0.25*mean(angent_1) + 0.2 * mean(angent_2) + 0.2*mean(angent_3) + 0.2 * mean(angent_4) + 0.15 * mean(angent_5)
+
+var_L <-  0.25^2 * var (angent_1) + 0.2^2 * var(angent_2) + 0.2^2 * var(angent_3) + 0.2^2 * var(angent_4) + 0.15^2 * var(angent_5)
+
+sd_L <- sqrt(var_L)
+
+cat('lower bond is:',(E_L-sd_L*qt(p = 0.975,df=96)))
+cat('\n','upper bond is:',(E_L+sd_L*qt(p = 0.975,df=96)))
+```
+
+
+
+## Problem Two
+### question one
+```{r}
+data2 <- read.table("Hayfever.txt",header = TRUE)
+data2$A <- as.factor(data2$A)
+data2$B <- as.factor(data2$B)
+```
+```{r}
+# interaction plot
+interaction.plot(data2$A,data2$B,data2$Hoursofrel.)
+```
+
+**Analysis**
+There is some kind of interaction between factor A and factor B. 
+```{r}
+summary(aov(data2$Hoursofrel. ~ data2$A*data2$B))
+```
+
+**Analysis**
+
+As we can see from the table. The F value for interaction term of factor A and factor B is 122.2. The p value is smaller than 2e-16. Which means that the interaction term indeed effect.
+
+### question (b)
+```{r}
+summary(aov(data2$Hoursofrel. ~ data2$A+data2$B))
+```
+
+**Analysis**
+
+As we can see from the table, without the interaction term. The both factor A and factor B effect.
+
+
+### problem (c) 
+```{r}
+fit <- lm(data2$Hoursofrel.~data2$A*data2$B)
+summary(fit)
+```
+
+### question (c)
+```{r}
+cat('\n the mean of u23 is:' ,2.4750 + 2.9750 + 2.1000 + 1.5750) 
+cat('\n variance of u23 is:', 0.1735^2 + 0.1735^2 + 0.2453^2 )
+cat('\n standard deviation of u23 is:',sqrt(0.1203766))
+cat('\n the upper bond of CI is:', 9.125 + qt(p = 0.975,df = 3) * 0.3469533)
+cat('\n the lower bond of CI is:', 9.125 - qt(p = 0.975,df = 3) * 0.3469533)
+```
+
+### question (d)
+```{r}
+cat('\n the mean of L is:',2.4750  + 2.1250)
+cat('\n the standard deviation is:',0.1735^2 + 0.1227^2)
+cat('\n the upper bond of CI is:', 4.6 + qt(p = 0.975,df = 3) * 0.04515754)
+cat('\n the lower bond of CI is:', 4.6 - qt(p = 0.975,df = 3) * 0.04515754)
+```
+
