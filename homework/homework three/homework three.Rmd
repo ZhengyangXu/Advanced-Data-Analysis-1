@@ -82,89 +82,16 @@ pairs(pair_compare[1:5], pch = 21)
 plot(tk)
 ```
 
-### question (c)
-Here we need to use the Bonferroni procedure with 90% family confidence coefficient.
 ```{r}
-data_new <- data[(data$Agent == 1 | data$Agent == 3 | data$Agent == 5),]
+data$Agent <- as.factor(data$Agent)
+fit <- lm(data$Time_lapse ~ data$Agent-1)
+summary(fit)
 
-summary(aov(formula = Time_lapse~Agent, data = data_new))
-
-
-
-bonftest <- pairwise.t.test(data_new$Time_lapse,data_new$Agent,pool.sd = TRUE, p.adjust.method='bonf')
-bonftest
-```
-
-### question (d)
-```{r}
-# first Let calculate the mean of L hat
-E_L_hat <- (1/2) * mean(angent_1) + (1/2) * mean(angent_2) - (1/2) * mean(angent_3) -(1/2) * mean(angent_4) 
-# scond we need to find the value of mse in this situation
-data_d_1 <- data[(data$Agent == 1 | data$Agent ==2 | data$Agent == 3 | data$Agent == 4),]
-summary(aov(Time_lapse~Agent,data = data_d_1))
-mse <- 7
-
-# calcualte standard deviation of L hat
-se_L_hat <- sqrt(mse)*sqrt( ((1/2)^2/20)*4)
-                
-cat('lower bond is:',(E_L_hat - se_L_hat * qt(p=0.975,df = 80-4)))      
-cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p=0.975,df = 80-4)))
-```
-### question (e)
-```{r}
-# first Let calculate the mean of L hat
-E_L_hat <-  mean(angent_1) - mean(angent_2) 
-# scond we need to find the value of mse in this situation
-data_e_1 <- data[(data$Agent == 1 | data$Agent ==2),]
-summary(aov(Time_lapse~Agent,data = data_e_1))
-mse <- 7.52
-
-# calcualte standard deviation of L hat
-se_L_hat <- sqrt(mse)*sqrt((1/20)*2)
-                
-cat('lower bond is:',(E_L_hat - se_L_hat * qt(p=0.975,df = 40-2)))      
-cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p=0.975,df = 40-2)))
 ```
 
 ```{r}
-# first Let calculate the mean of L hat
-E_L_hat <-  (1/2)* mean(angent_1) + (1/2)* mean(angent_2) - mean(angent_5)
-# scond we need to find the value of mse in this situation
-data_e_2 <- data[(data$Agent == 1 | data$Agent ==2 | data$Agent == 5),]
-summary(aov(Time_lapse~Agent,data = data_e_2))
-mse <- 8.21
-
-# calcualte standard deviation of L hat
-se_L_hat <- sqrt(mse)*sqrt(((1/2)^2/20)*2 + 1/20)
-                
-cat('lower bond is:',(E_L_hat - se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))      
-cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))
-```
-```{r}
-# first Let calculate the mean of L hat
-E_L_hat <-  (1/2)* mean(angent_3) + (1/2)* mean(angent_4) - mean(angent_5)
-# scond we need to find the value of mse in this situation
-data_e_2 <- data[(data$Agent == 3 | data$Agent == 4 | data$Agent == 5),]
-summary(aov(Time_lapse~Agent,data = data_e_2))
-mse <- 7.5
-
-# calcualte standard deviation of L hat
-se_L_hat <- sqrt(mse)*sqrt(((1/2)^2/20)*2 + 1/20)
-                
-cat('lower bond is:',(E_L_hat - se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))      
-cat('\n','upper bond is:',(E_L_hat + se_L_hat * qt(p= 1 - (0.05/3)/2,df = 60-3)))
-```
-
-### question (f)
-```{r}
-E_L <- 0.25*mean(angent_1) + 0.2 * mean(angent_2) + 0.2*mean(angent_3) + 0.2 * mean(angent_4) + 0.15 * mean(angent_5)
-
-var_L <-  0.25^2 * var (angent_1) + 0.2^2 * var(angent_2) + 0.2^2 * var(angent_3) + 0.2^2 * var(angent_4) + 0.15^2 * var(angent_5)
-
-sd_L <- sqrt(var_L)
-
-cat('lower bond is:',(E_L-sd_L*qt(p = 0.975,df=96)))
-cat('\n','upper bond is:',(E_L+sd_L*qt(p = 0.975,df=96)))
+0.25 * 24.5500 + 0.2 * 22.5500 + 0.2*11.7500 +0.2* 14.8000 +0.15*30.1000 
+sqrt(0.6133^2*(0.25^2 + 0.2^2 * 3 + 0.15^2))
 ```
 
 
@@ -191,36 +118,8 @@ summary(aov(data2$Hoursofrel. ~ data2$A*data2$B))
 
 As we can see from the table. The F value for interaction term of factor A and factor B is 122.2. The p value is smaller than 2e-16. Which means that the interaction term indeed effect.
 
-### question (b)
 ```{r}
-summary(aov(data2$Hoursofrel. ~ data2$A+data2$B))
+summary(lm(data2$Hoursofrel. ~ data2$A * data2$B - data2$A - data2$B - 1))
 ```
 
-**Analysis**
-
-As we can see from the table, without the interaction term. The both factor A and factor B effect.
-
-
-### problem (c) 
-```{r}
-fit <- lm(data2$Hoursofrel.~data2$A*data2$B)
-summary(fit)
-```
-
-### question (c)
-```{r}
-cat('\n the mean of u23 is:' ,2.4750 + 2.9750 + 2.1000 + 1.5750) 
-cat('\n variance of u23 is:', 0.1735^2 + 0.1735^2 + 0.2453^2 )
-cat('\n standard deviation of u23 is:',sqrt(0.1203766))
-cat('\n the upper bond of CI is:', 9.125 + qt(p = 0.975,df = 3) * 0.3469533)
-cat('\n the lower bond of CI is:', 9.125 - qt(p = 0.975,df = 3) * 0.3469533)
-```
-
-### question (d)
-```{r}
-cat('\n the mean of L is:',2.4750  + 2.1250)
-cat('\n the standard deviation is:',0.1735^2 + 0.1227^2)
-cat('\n the upper bond of CI is:', 4.6 + qt(p = 0.975,df = 3) * 0.04515754)
-cat('\n the lower bond of CI is:', 4.6 - qt(p = 0.975,df = 3) * 0.04515754)
-```
 
