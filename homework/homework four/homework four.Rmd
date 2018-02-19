@@ -1,0 +1,54 @@
+---
+title: "Homework four"
+author: "Yi Chen(yc3356)"
+date: "February 19, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework Four
+### problem one
+```{r}
+setwd("C:/Users/cheny/Desktop/study/second term/Advanced Data Analysis/homework/homework four")
+data <- read.csv("mileage.csv",header = TRUE)
+```
+####(a)
+```{r}
+fit_1 <- lm(y~factor(x1) + x2,data = data)
+summary(fit_1)
+```
+
+**analysis**
+
+1. the estimated value of $\beta_0 = 32.0171$. This means that, for premium unleaded gasoline types A, if gasoline additive VST is 0, the average of the gasoline mileage is estimated to be 32.0171.
+
+2. the estimated value of $\beta_1 = 1.5218$. This means that, if fix gasoline additive VST to be the same, for premium unleaded gasoline types B on the average will have 1.5218 higher gasoline mileage than premium unleaded gasoline types A.
+
+3. the estimated value of $\beta_2 = 0.5252$This means that, if fix gasoline additive VST to be the same, for premium unleaded gasoline types C on the average will have 0.5252 higher gasoline mileage than premium unleaded gasoline types A.
+
+4. the estimated value of $\beta_3 = -0.4192$. This means that, if fix the premium unleaded gasoline types to be the same, if we increase 1 unit of gasoline additive VST, on the average the gasoline mileage will decrease 0.4192.
+
+####(b)
+```{r}
+confint(fit_1,level = 0.95)
+```
+
+**analysis**
+
+Based on the data, we are 95% confident  that the "true" $\beta_1$(marginal effect of premium unleaded gasoline types B compared with type A) is between -1.135886 and 4.1795680. 
+
+This also show that:for current significance level, we cannot reject the hyphothesis that $\beta_1=0$. There may have no difference for the marginal effect of premium unleaded gasoline types B compared and type A. Since, this confidence interval include the point 0.
+
+(c)
+```{r}
+anova(fit_1)
+```
+
+**analysis**
+
+As we can see from the anova table, the F-value for factor(x1) (which is related to $\beta_1$ and $\beta_2$) is 0.6989. And the p-value of this F test is 0.5101, which is bigger than $\alpha = 0.05$.
+
+Thus, we can conclude that we fail to reject the hyphothesis that $\beta_1=\beta_2=0$ for current data and significance level. And there may have no significant differenct between different premium unleaded gasoline types' effect on the gasoline mileage.
