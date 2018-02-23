@@ -17,7 +17,7 @@ data <- read.csv("mileage.csv",header = TRUE)
 ```
 ####(a)
 ```{r}
-fit_1 <- lm(y~factor(x1) + x2,data = data)
+fit_1 <- lm(y~x2+factor(x1),data = data)
 summary(fit_1)
 ```
 
