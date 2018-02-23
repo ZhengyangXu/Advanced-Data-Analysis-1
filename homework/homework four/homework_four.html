@@ -176,7 +176,8 @@ summary(fit_1)</code></pre>
 </div>
 <div id="c" class="section level4">
 <h4>(c)</h4>
-<pre class="r"><code>anova(fit_1)</code></pre>
+<pre class="r"><code># since here I use the factor method, thus I can use the anova directly
+anova(fit_1)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: y
@@ -187,6 +188,18 @@ summary(fit_1)</code></pre>
 <p><strong>analysis</strong></p>
 <p>As we can see from the anova table, the F-value for factor(x1) (which is related to <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>) is 0.6989. And the p-value of this F test is 0.5101, which is bigger than <span class="math inline">\(\alpha = 0.05\)</span>.</p>
 <p>Thus, we can conclude that we fail to reject the hyphothesis that <span class="math inline">\(\beta_1=\beta_2=0\)</span> for current data and significance level. And there may have no significant differenct between different premium unleaded gasoline types’ effect on the gasoline mileage.</p>
+<pre class="r"><code># method two
+fit_1_more &lt;- lm(y~x2,data = data)
+anova(fit_1_more,fit_1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: y ~ x2
+## Model 2: y ~ factor(x1) + x2
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     20 125.14                           
+## 2     18 115.42  2    9.7138 0.7574 0.4832</code></pre>
+<p><strong>analysis</strong></p>
+<p>Since the F value is 0.7574 and the p value is 0.4832. We can say that we fail to reject that the Ho hyphothesis that the <span class="math inline">\(\beta_1=\beta_2=0\)</span></p>
 </div>
 </div>
 <div id="problem-two" class="section level3">
@@ -258,24 +271,23 @@ anova(fit_3)</code></pre>
 </div>
 <div id="problem-four" class="section level3">
 <h3>problem four</h3>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Warning: package 'car' was built under R version 3.4.2</code></pre>
 <pre class="r"><code># input the data
 yield &lt;- c(192,195,292,249,190,203,218,210,214,139,245,163,221,152,204,134)
-treatment &lt;- c(4,1,3,2,1,4,2,3,3,2,1,4,2,3,4,1)
-cow &lt;- rep(c(1,2,3,4),4)
-period &lt;- c(rep(1,4),rep(2,4),rep(3,4),rep(4,4))
-data_4 &lt;- as.data.frame(cbind(yield,treatment,cow,period))
-fit_4 &lt;- lm(yield~treatment+cow+period,data = data_4)
-anova(fit_4)</code></pre>
-<pre><code>## Analysis of Variance Table
+treatment &lt;- c('D4','D1','D3','D2','D1','D4','D2','D3','D3','D2','D1','D4','D2','D3','D4','D1')
+cow &lt;- rep(c('C1','C2','C3','C4'),4)
+period &lt;- c(rep('P1',4),rep('P2',4),rep('P3',4),rep('P4',4))
+fit_4 &lt;- lm(yield~treatment+cow+period)
+Anova(fit_4,type = &quot;II&quot;)</code></pre>
+<pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: yield
-##           Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
-## treatment  1    15.3    15.3  0.0094 0.92419  
-## cow        1    94.6    94.6  0.0583 0.81321  
-## period     1  6319.0  6319.0  3.8969 0.07185 .
-## Residuals 12 19458.5  1621.5                  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+##           Sum Sq Df F value Pr(&gt;F)
+## treatment 1995.7  3  0.5377 0.6736
+## cow       9929.2  3  2.6751 0.1409
+## period    6539.2  3  1.7618 0.2540
+## Residuals 7423.4  6</code></pre>
 <p><strong>analysis</strong></p>
 <p>H0: all average yield are the same for the 4 treatments.</p>
 <p>As we can see from the anova table, the F-value for treatment is 0.0094 and the p-value for this F test is 0.92419, which is much bigger than <span class="math inline">\(\alpha = 0.05\)</span>.</p>
