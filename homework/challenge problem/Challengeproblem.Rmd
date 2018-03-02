@@ -30,7 +30,14 @@ deliquency_yes <- c(10,40,18,18,8,2)
 deliquency_no <- c(40,160,132,132,192,48)
 data_1 <- as.data.frame(cbind(social_economics,Boy_Scout,deliquency_yes,deliquency_no))
 data_1
+
+
 ```
+```{r}
+
+```
+
+
 
 ```{r}
 logit1 <- glm(formula = cbind(deliquency_yes,deliquency_no)~factor(social_economics)+factor(Boy_Scout),family = binomial)

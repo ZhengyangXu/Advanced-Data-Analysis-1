@@ -173,7 +173,7 @@ summary(fit1)</code></pre>
 <h4>(b)</h4>
 <p>Estimate <span class="math inline">\(\beta1\)</span>, the effect of temperature on the probability of thermal distress. Interpret your result.</p>
 <p><strong>Analysis</strong></p>
-<p>As we can see from the result: the estimated value of <span class="math inline">\(\beta_1=-0.2322\)</span>. This indecate that on average, if we ignore the effect of oter underlying factors, if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would be <span class="math inline">\(e^{-0.2322}=0.7927875\)</span> times as before. i.e. will have approximately 20.72% of decrease.</p>
+<p>As we can see from the result: the estimated value of <span class="math inline">\(\beta_1=-0.2322\)</span>. This indecate that on average, if we ignore the effect of other underlying factors, if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would be <span class="math inline">\(e^{-0.2322}=0.7927875\)</span> times as before. i.e. will have approximately 20.72% of decrease.</p>
 </div>
 <div id="c" class="section level4">
 <h4>(C)</h4>
@@ -189,7 +189,7 @@ summary(fit1)</code></pre>
 ## (Intercept)         27.9546841 8.214986e+14
 ## shuttle$Temperature  0.5972188 9.409919e-01</code></pre>
 <p><strong>Analysis</strong></p>
-<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_1\)</span> is between -0.5154718 and -0.06082076. This indecate that, on average, if we ignore the effect of oter underlying factors, we have 95 percent of confidenct to conclude that if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would between <span class="math inline">\(e^{-0.5154718}=0.5972188\)</span> and <span class="math inline">\(e^{-0.06082076}=0.9409919\)</span> times as before. i.e. will have approximately 6% to 40% of decrease.</p>
+<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_1\)</span> is between -0.5154718 and -0.06082076. This indecate that, on average, if we ignore the effect of other underlying factors, we have 95 percent of confidenct to conclude that if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would between <span class="math inline">\(e^{-0.5154718}=0.5972188\)</span> and <span class="math inline">\(e^{-0.06082076}=0.9409919\)</span> times as before. i.e. will have approximately 6% to 40% of decrease.</p>
 </div>
 <div id="d" class="section level4">
 <h4>(D)</h4>
@@ -201,7 +201,7 @@ summary(fit1)</code></pre>
 <h4>(E)</h4>
 <p>At what temperature does the predicted probability equal 0.5?</p>
 <p><strong>Analysis</strong></p>
-<p><span class="math display">\[\pi(TD=1)=\frac{p(TD=1)}{1-P(TD=1)}=1\]</span> <span class="math display">\[logit(\pi(TD=1|Temperature))=log(1)=0\]</span> <span class="math display">\[15.0429-0.2322T\times Temperature=0\]</span> <span class="math display">\[Temperature=64.78424\]</span></p>
+<p><span class="math display">\[odd(TD=1)=\frac{p(TD=1)}{1-P(TD=1)}=1\]</span> <span class="math display">\[logit(\pi(TD=1|Temperature))=log(1)=0\]</span> <span class="math display">\[15.0429-0.2322T\times Temperature=0\]</span> <span class="math display">\[Temperature=64.78424\]</span></p>
 </div>
 </div>
 <div id="problem-two" class="section level3">
@@ -209,12 +209,12 @@ summary(fit1)</code></pre>
 <div id="a-1" class="section level4">
 <h4>(a)</h4>
 <p>Estimate <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> and interpret your result.</p>
-<pre class="r"><code>fit2 &lt;- glm(cbind(adolesent$Yes,adolesent$No)~adolesent$Race+adolesent$Gender,family = binomial(&quot;logit&quot;))
+<pre class="r"><code>fit2 &lt;- glm(cbind(adolesent$Yes,adolesent$No)~adolesent$Gender+adolesent$Race,family = binomial(&quot;logit&quot;))
 summary(fit2)</code></pre>
 <pre><code>## 
 ## Call:
-## glm(formula = cbind(adolesent$Yes, adolesent$No) ~ adolesent$Race + 
-##     adolesent$Gender, family = binomial(&quot;logit&quot;))
+## glm(formula = cbind(adolesent$Yes, adolesent$No) ~ adolesent$Gender + 
+##     adolesent$Race, family = binomial(&quot;logit&quot;))
 ## 
 ## Deviance Residuals: 
 ##        1         2         3         4  
@@ -223,8 +223,8 @@ summary(fit2)</code></pre>
 ## Coefficients:
 ##                      Estimate Std. Error z value Pr(&gt;|z|)    
 ## (Intercept)           -0.4555     0.2221  -2.050  0.04032 *  
-## adolesent$RaceWhite   -1.3135     0.2378  -5.524 3.32e-08 ***
 ## adolesent$GenderMale   0.6478     0.2250   2.879  0.00399 ** 
+## adolesent$RaceWhite   -1.3135     0.2378  -5.524 3.32e-08 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -236,12 +236,12 @@ summary(fit2)</code></pre>
 ## 
 ## Number of Fisher Scoring iterations: 3</code></pre>
 <pre class="r"><code>exp(coef(fit2))</code></pre>
-<pre><code>##          (Intercept)  adolesent$RaceWhite adolesent$GenderMale 
-##            0.6341367            0.2688881            1.9113913</code></pre>
+<pre><code>##          (Intercept) adolesent$GenderMale  adolesent$RaceWhite 
+##            0.6341367            1.9113913            0.2688881</code></pre>
 <p><strong>Analysis</strong></p>
 <ol style="list-style-type: decimal">
-<li><p>the estimated value of <span class="math inline">\(\beta_1=-1.3135\)</span>, this means if we fix the gender factor (i.e. let the gender to be both male or both female), on average, for thoes who is white, their odd of having sexual intercourse would be <span class="math inline">\(e^{-1.3135}=0.2688773\)</span> times the odd of having sexual intercourse for the black.</p></li>
-<li><p>the estimated value of <span class="math inline">\(\beta_2=0.6478\)</span>, thie means if we fix race (i.e. let the race to be both black or both white), on average, for thoes who is male, their odd of having sexual intercourse would be <span class="math inline">\(e^{0.6478}=1.911331\)</span> time the odd of having sexual intercourse for the famle.</p></li>
+<li><p>the estimated value of <span class="math inline">\(\beta_1=0.6478\)</span>, thie means if we fix race (i.e. let the race to be both black or both white), on average, for thoes who is male, their odd of having sexual intercourse would be <span class="math inline">\(e^{0.6478}=1.911331\)</span> times the odd of having sexual intercourse for the famle.</p></li>
+<li><p>the estimated value of <span class="math inline">\(\beta_2=-1.3135\)</span>, this means if we fix the gender factor (i.e. let the gender to be both male or both female), o2n average, for thoes who is white, their odd of having sexual intercourse would be <span class="math inline">\(e^{-1.3135}=0.2688773\)</span> times the odd of having sexual intercourse for the black.</p></li>
 </ol>
 </div>
 <div id="b-1" class="section level4">
@@ -251,22 +251,22 @@ summary(fit2)</code></pre>
 <pre><code>## Waiting for profiling to be done...</code></pre>
 <pre><code>##                           2.5 %      97.5 %
 ## (Intercept)          -0.8971266 -0.02385449
-## adolesent$RaceWhite  -1.7824267 -0.84865350
-## adolesent$GenderMale  0.2105773  1.09436472</code></pre>
+## adolesent$GenderMale  0.2105773  1.09436472
+## adolesent$RaceWhite  -1.7824267 -0.84865350</code></pre>
 <pre class="r"><code>exp(confint(fit2))</code></pre>
 <pre><code>## Waiting for profiling to be done...</code></pre>
 <pre><code>##                          2.5 %    97.5 %
 ## (Intercept)          0.4077396 0.9764278
-## adolesent$RaceWhite  0.1682294 0.4279908
-## adolesent$GenderMale 1.2343904 2.9872843</code></pre>
+## adolesent$GenderMale 1.2343904 2.9872843
+## adolesent$RaceWhite  0.1682294 0.4279908</code></pre>
 <p><strong>Analysis</strong></p>
-<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_1\)</span> is between -1.7824267 and -0.84865350. This indecate that, if we fix the gender factor (i.e. let the gender to be both male or both female) , on average we have 95 percent of confidenct to conclude that for thoes who is white, their odd of having sexual intercourse would be <span class="math inline">\(e^{-1.7824267}=0.1682294\)</span> to <span class="math inline">\(e^{-0.84865350}=0.4279908\)</span> times the odd of having sexual intercourse for the black.</p>
+<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_1\)</span> is between 0.2105773 and 1.09436472. This indecate that, if we fix the gender factor (i.e. let the gender to be both male or both female) , on average we have 95 percent of confidenct to conclude that for thoes who is white, their odd of having sexual intercourse would be <span class="math inline">\(e^{0.2105773}=1.2343904\)</span> to <span class="math inline">\(e^{1.09436472}=2.9872843\)</span> times the odd of having sexual intercourse for the black.</p>
 </div>
 <div id="c-1" class="section level4">
 <h4>(c)</h4>
 <p>Construct a 95% confidence interval to describe the effect of race on the odds of Intercourse controlling for gender, Interpret your result.</p>
 <p><strong>Analysis</strong></p>
-<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_2\)</span> is between 0.2105773 and 1.09436472. This indecate that, if we fix race (i.e. let the race to be both black or both white), on average, we have 95 percent of confidenct to conclude that for thoes who is male, their odd of having sexual intercourse would be <span class="math inline">\(e^{0.2105773}=1.2343904\)</span> to <span class="math inline">\(e^{1.09436472}=2.9872843\)</span> time the odd of having sexual intercourse for the famle.</p>
+<p>As we can see from the table, the confidence interval of <span class="math inline">\(\beta_2\)</span> is between -1.7824267 and -0.84865350. This indecate that, if we fix race (i.e. let the race to be both black or both white), on average, we have 95 percent of confidenct to conclude that for thoes who is male, their odd of having sexual intercourse would be <span class="math inline">\(e^{-1.7824267}=0.1682294\)</span> to <span class="math inline">\(e^{-0.84865350}=0.4279908\)</span> times the odd of having sexual intercourse for the famle.</p>
 </div>
 <div id="d-1" class="section level4">
 <h4>(d)</h4>
@@ -278,7 +278,7 @@ summary(fit2)</code></pre>
 <h4>(e)</h4>
 <p>Test H0 : <span class="math inline">\(\beta_1 = 0\)</span></p>
 <p><strong>Analysis</strong></p>
-<p>As we can see from the table that the p-value of <span class="math inline">\(\beta_1 = 3.32e-08 \leq 0.05\)</span>. And the z value is -5.524. Thus, we can reject the H0. i.e. for race will have a significant inference on the whether having sexual intercourse</p>
+<p>As we can see from the table that the p-value of <span class="math inline">\(\beta_1 = 0.00399 \leq 0.05\)</span>. And the z value is 2.879. Thus, we can reject the H0. i.e. for race will have a significant inference on the whether having sexual intercourse</p>
 </div>
 </div>
 </div>
