@@ -149,31 +149,39 @@ data_1</code></pre>
 ## 4                3         1             18           132
 ## 5                1         2              8           192
 ## 6                1         1              2            48</code></pre>
-<pre class="r"><code>logit1 &lt;- glm(formula = cbind(deliquency_yes,deliquency_no)~factor(social_economics)+factor(Boy_Scout),family = binomial)
+<pre class="r"><code>logit1 &lt;- glm(formula = cbind(deliquency_yes,deliquency_no)~factor(social_economics)*factor(Boy_Scout),family = binomial)
 summary(logit1)</code></pre>
 <pre><code>## 
 ## Call:
-## glm(formula = cbind(deliquency_yes, deliquency_no) ~ factor(social_economics) + 
+## glm(formula = cbind(deliquency_yes, deliquency_no) ~ factor(social_economics) * 
 ##     factor(Boy_Scout), family = binomial)
 ## 
 ## Deviance Residuals: 
-##         1          2          3          4          5          6  
-## 1.154e-07  1.333e-07  0.000e+00  0.000e+00  0.000e+00  2.980e-08  
+## [1]  0  0  0  0  0  0
 ## 
 ## Coefficients:
-##                                  Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                    -3.178e+00  3.802e-01  -8.360  &lt; 2e-16 ***
-## factor(social_economics)low     1.792e+00  3.897e-01   4.598 4.27e-06 ***
-## factor(social_economics)Median  1.186e+00  3.760e-01   3.153  0.00162 ** 
-## factor(Boy_Scout)Yes           -3.956e-16  2.511e-01   0.000  1.00000    
+##                                                       Estimate Std. Error
+## (Intercept)                                         -3.178e+00  7.217e-01
+## factor(social_economics)low                          1.792e+00  7.430e-01
+## factor(social_economics)Median                       1.186e+00  7.642e-01
+## factor(Boy_Scout)Yes                                -9.615e-16  8.069e-01
+## factor(social_economics)low:factor(Boy_Scout)Yes     2.304e-16  8.985e-01
+## factor(social_economics)Median:factor(Boy_Scout)Yes  1.304e-15  8.816e-01
+##                                                     z value Pr(&gt;|z|)    
+## (Intercept)                                          -4.404 1.06e-05 ***
+## factor(social_economics)low                           2.411   0.0159 *  
+## factor(social_economics)Median                        1.552   0.1208    
+## factor(Boy_Scout)Yes                                  0.000   1.0000    
+## factor(social_economics)low:factor(Boy_Scout)Yes      0.000   1.0000    
+## factor(social_economics)Median:factor(Boy_Scout)Yes   0.000   1.0000    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
-##     Null deviance:  3.2752e+01  on 5  degrees of freedom
-## Residual deviance: -1.1990e-14  on 2  degrees of freedom
-## AIC: 32.933
+##     Null deviance: 3.2752e+01  on 5  degrees of freedom
+## Residual deviance: 3.3307e-14  on 0  degrees of freedom
+## AIC: 36.933
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
 <p><strong>Analysis of t test</strong></p>
@@ -188,11 +196,13 @@ summary(logit1)</code></pre>
 </ol>
 <pre class="r"><code>confint(logit1)</code></pre>
 <pre><code>## Waiting for profiling to be done...</code></pre>
-<pre><code>##                                     2.5 %     97.5 %
-## (Intercept)                    -3.9776309 -2.4766143
-## factor(social_economics)low     1.0633292  2.6037768
-## factor(social_economics)Median  0.4832948  1.9723094
-## factor(Boy_Scout)Yes           -0.4971858  0.4897023</code></pre>
+<pre><code>##                                                          2.5 %    97.5 %
+## (Intercept)                                         -4.9895838 -2.007684
+## factor(social_economics)low                          0.5609358  3.629008
+## factor(social_economics)Median                      -0.1067146  3.048042
+## factor(Boy_Scout)Yes                                -1.4229216  1.912172
+## factor(social_economics)low:factor(Boy_Scout)Yes    -2.0418148  1.623844
+## factor(social_economics)Median:factor(Boy_Scout)Yes -2.0141439  1.594590</code></pre>
 <p><strong>Analysis of t confidence interval</strong></p>
 <p>Thrid, for the confidence interval:</p>
 <ol style="list-style-type: decimal">
