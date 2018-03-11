@@ -43,7 +43,7 @@ data_1
 
 
 ```{r}
-logit1 <- glm(formula = cbind(deliquency_yes,deliquency_no)~factor(social_economics),family = binomial)
+logit1 <- glm(formula = cbind(deliquency_yes,deliquency_no)~factor(Boy_Scout)+factor(social_economics),family = binomial)
 summary(logit1)
 ```
 
